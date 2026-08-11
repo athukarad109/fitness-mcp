@@ -107,7 +107,7 @@ def test_host_port_defaults_and_override(monkeypatch):
 
 - [ ] **Step 4: Run test to verify it fails**
 
-Run: `uv run --extra dev pytest tests/test_config.py -v`
+Run: `python -m uv run --extra dev pytest tests/test_config.py -v`
 Expected: FAIL (`ModuleNotFoundError` / missing attributes)
 
 - [ ] **Step 5: Implement `src/fitness_mcp/config.py`**
@@ -144,7 +144,7 @@ def receiver_port() -> int:
 
 - [ ] **Step 6: Run test to verify it passes**
 
-Run: `uv run --extra dev pytest tests/test_config.py -v`
+Run: `python -m uv run --extra dev pytest tests/test_config.py -v`
 Expected: PASS (2 passed)
 
 - [ ] **Step 7: Commit**
@@ -202,7 +202,7 @@ def test_coverage(tmp_path, monkeypatch):
 
 - [ ] **Step 2: Run test to verify it fails**
 
-Run: `uv run --extra dev pytest tests/test_store.py -v`
+Run: `python -m uv run --extra dev pytest tests/test_store.py -v`
 Expected: FAIL (`ModuleNotFoundError: fitness_mcp.store`)
 
 - [ ] **Step 3: Implement `src/fitness_mcp/store.py`**
@@ -268,7 +268,7 @@ def coverage(kind: str, key: str) -> dict | None:
 
 - [ ] **Step 4: Run test to verify it passes**
 
-Run: `uv run --extra dev pytest tests/test_store.py -v`
+Run: `python -m uv run --extra dev pytest tests/test_store.py -v`
 Expected: PASS (2 passed)
 
 - [ ] **Step 5: Commit**
@@ -324,7 +324,7 @@ def test_first():
 
 - [ ] **Step 2: Run test to verify it fails**
 
-Run: `uv run --extra dev pytest tests/test_util.py -v`
+Run: `python -m uv run --extra dev pytest tests/test_util.py -v`
 Expected: FAIL (`ModuleNotFoundError: fitness_mcp.util`)
 
 - [ ] **Step 3: Implement `src/fitness_mcp/util.py`**
@@ -414,7 +414,7 @@ def test_build_daily_respects_range():
 
 - [ ] **Step 5: Run test to verify it fails**
 
-Run: `uv run --extra dev pytest tests/test_aggregate.py -v`
+Run: `python -m uv run --extra dev pytest tests/test_aggregate.py -v`
 Expected: FAIL (`ModuleNotFoundError: fitness_mcp.aggregate`)
 
 - [ ] **Step 6: Implement `src/fitness_mcp/aggregate.py`**
@@ -475,7 +475,7 @@ def build_daily(raw_by_kind: dict, start: str, end: str) -> list[dict]:
 
 - [ ] **Step 7: Run tests to verify they pass**
 
-Run: `uv run --extra dev pytest tests/test_util.py tests/test_aggregate.py -v`
+Run: `python -m uv run --extra dev pytest tests/test_util.py tests/test_aggregate.py -v`
 Expected: PASS (5 passed)
 
 - [ ] **Step 8: Commit**
@@ -578,7 +578,7 @@ def test_map_payload_empty():
 
 - [ ] **Step 3: Run test to verify it fails**
 
-Run: `uv run --extra dev pytest tests/test_mapper.py -v`
+Run: `python -m uv run --extra dev pytest tests/test_mapper.py -v`
 Expected: FAIL (`ModuleNotFoundError: fitness_mcp.webhook_mapper`)
 
 - [ ] **Step 4: Implement `src/fitness_mcp/webhook_mapper.py`**
@@ -686,7 +686,7 @@ def map_payload(payload: dict) -> dict:
 
 - [ ] **Step 5: Run tests to verify they pass**
 
-Run: `uv run --extra dev pytest tests/test_mapper.py -v`
+Run: `python -m uv run --extra dev pytest tests/test_mapper.py -v`
 Expected: PASS (3 passed)
 
 - [ ] **Step 6: Commit**
@@ -765,7 +765,7 @@ def test_metric_stats_no_data(tmp_path, monkeypatch):
 
 - [ ] **Step 2: Run test to verify it fails**
 
-Run: `uv run --extra dev pytest tests/test_server.py -v`
+Run: `python -m uv run --extra dev pytest tests/test_server.py -v`
 Expected: FAIL (`ModuleNotFoundError: fitness_mcp.server`)
 
 - [ ] **Step 3: Implement `src/fitness_mcp/server.py`**
@@ -859,7 +859,7 @@ if __name__ == "__main__":
 
 - [ ] **Step 4: Run tests to verify they pass**
 
-Run: `uv run --extra dev pytest tests/test_server.py -v`
+Run: `python -m uv run --extra dev pytest tests/test_server.py -v`
 Expected: PASS (4 passed)
 
 - [ ] **Step 5: Commit**
@@ -935,7 +935,7 @@ def test_http_health_and_webhook(tmp_path, monkeypatch):
 
 - [ ] **Step 2: Run test to verify it fails**
 
-Run: `uv run --extra dev pytest tests/test_receiver.py -v`
+Run: `python -m uv run --extra dev pytest tests/test_receiver.py -v`
 Expected: FAIL (`ModuleNotFoundError: fitness_mcp.receiver`)
 
 - [ ] **Step 3: Implement `src/fitness_mcp/receiver.py`**
@@ -1029,12 +1029,12 @@ if __name__ == "__main__":
 
 - [ ] **Step 4: Run tests to verify they pass**
 
-Run: `uv run --extra dev pytest tests/test_receiver.py -v`
+Run: `python -m uv run --extra dev pytest tests/test_receiver.py -v`
 Expected: PASS (2 passed)
 
 - [ ] **Step 5: Run the full suite**
 
-Run: `uv run --extra dev pytest -v`
+Run: `python -m uv run --extra dev pytest -v`
 Expected: PASS (all tests green)
 
 - [ ] **Step 6: Commit**
@@ -1065,7 +1065,7 @@ New-NetFirewallRule -DisplayName "Fitness MCP receiver" -Direction Inbound -Acti
 
 - [ ] **Step 2: Start the receiver and self-test**
 
-Run: `uv run python -m fitness_mcp.receiver`
+Run: `python -m uv run python -m fitness_mcp.receiver`
 Then from the same PC: browse to `http://127.0.0.1:8765/health` → expect `{"status": "ok"}`.
 From the phone's browser (same wifi): `http://<pc-lan-ip>:8765/health` → expect the same. If it fails, re-check the firewall rule and that host is `0.0.0.0`.
 
@@ -1081,7 +1081,7 @@ From the phone's browser (same wifi): `http://<pc-lan-ip>:8765/health` → expec
 - Compare its array names and record field names against `_CUMULATIVE`, the heart-rate/sleep/exercise/weight candidate lists, and `payload.json`.
 - If anything differs: update the candidate name lists in `webhook_mapper.py` and update `tests/fixtures/payload.json` to match reality, then:
 
-Run: `uv run --extra dev pytest -v`
+Run: `python -m uv run --extra dev pytest -v`
 Expected: PASS. Re-trigger "Sync Now" and confirm `list_data_coverage` (next step) shows non-null ranges.
 
 - [ ] **Step 5: Register the MCP server with Claude Desktop**
