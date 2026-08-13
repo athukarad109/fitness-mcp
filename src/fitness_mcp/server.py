@@ -16,6 +16,10 @@ _RAW_DATE_FIELD = {
 
 _COVERAGE = {
     "steps": "start",
+    "distance": "start",
+    "active_calories": "start",
+    "total_calories": "start",
+    "active_minutes": "start",
     "heart_rate": "time",
     "sleep": "start",
     "workouts": "start",
@@ -47,6 +51,12 @@ def get_daily_metrics(start_date: str, end_date: str) -> list[dict]:
 def get_sleep(start_date: str, end_date: str) -> list[dict]:
     """Sleep sessions starting within [start_date, end_date]."""
     return store.query_range("sleep", "start", start_date, end_date)
+
+
+@mcp.tool()
+def get_body_metrics(start_date: str, end_date: str) -> list[dict]:
+    """Body measurements (e.g. weight_kg) recorded within [start_date, end_date]."""
+    return store.query_range("body_metrics", "date", start_date, end_date)
 
 
 @mcp.tool()

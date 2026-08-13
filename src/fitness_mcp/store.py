@@ -1,8 +1,11 @@
 import json
 import os
+import threading
 from pathlib import Path
 
 from . import config
+
+_write_lock = threading.Lock()
 
 KINDS = {
     "steps": "steps.json",
@@ -35,22 +38,23 @@ def _atomic_write(path: Path, data: dict) -> None:
 
 
 def upsert(kind: str, records: list[dict], key: str) -> int:
-    data = _load(kind)
-    for rec in records:
-        data[str(rec[key])] = rec
-    _atomic_write(_path(kind), data)
-    return len(records)
+    with _write_lock:
+        data = _load(kind)
+        for rec in records:
+            data[str(rec[key])] = rec
+        _atomic_write(_path(kind), data)
+        return len(records)
 
 
 def query_range(kind: str, key: str, start: str, end: str) -> list[dict]:
     data = _load(kind)
-    out = [r for r in data.values() if start <= str(r[key])[:10] <= end]
+    out = [r for r in data.values() if r.get(key) is not None and start <= str(r[key])[:10] <= end]
     return sorted(out, key=lambda r: str(r[key]))
 
 
 def coverage(kind: str, key: str) -> dict | None:
     data = _load(kind)
-    if not data:
+    dates = sorted(str(r[key])[:10] for r in data.values() if r.get(key) is not None)
+    if not dates:
         return None
-    dates = sorted(str(r[key])[:10] for r in data.values())
-    return {"count": len(data), "start": dates[0], "end": dates[-1]}
+    return {"count": len(dates), "start": dates[0], "end": dates[-1]}

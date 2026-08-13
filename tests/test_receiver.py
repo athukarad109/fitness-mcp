@@ -28,7 +28,9 @@ def test_http_health_and_webhook(tmp_path, monkeypatch):
     try:
         conn = http.client.HTTPConnection("127.0.0.1", port)
         conn.request("GET", "/health")
-        assert conn.getresponse().status == 200
+        health_resp = conn.getresponse()
+        assert health_resp.status == 200
+        assert json.loads(health_resp.read()) == {"status": "ok"}
 
         body = (FIX / "payload.json").read_text()
         conn.request("POST", "/webhook", body=body, headers={"Content-Type": "application/json"})
@@ -41,3 +43,4 @@ def test_http_health_and_webhook(tmp_path, monkeypatch):
         assert conn.getresponse().status == 400
     finally:
         srv.shutdown()
+        srv.server_close()

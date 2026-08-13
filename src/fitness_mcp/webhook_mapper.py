@@ -23,7 +23,7 @@ def _array(payload: dict, names: list[str]) -> list:
     return []
 
 
-def map_payload(payload: dict) -> dict:
+def map_payload(payload: dict) -> dict[str, list[dict]]:
     out: dict[str, list[dict]] = {}
 
     for kind, (names, value_keys) in _CUMULATIVE.items():

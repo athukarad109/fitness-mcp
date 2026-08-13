@@ -4,6 +4,8 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 from . import config, store, webhook_mapper
 
+_MAX_BODY_BYTES = 25 * 1024 * 1024
+
 # store kind -> field used as the upsert (dedup) key
 _UPSERT_KEY = {
     "steps": "id",
@@ -51,17 +53,21 @@ class _Handler(BaseHTTPRequestHandler):
             self._json(404, {"error": "not found"})
             return
         length = int(self.headers.get("Content-Length") or 0)
+        if length > _MAX_BODY_BYTES:
+            self._json(413, {"error": "payload too large"})
+            return
         raw = self.rfile.read(length)
+        _save_raw(raw)
         try:
             payload = json.loads(raw)
         except ValueError:
             self._json(400, {"error": "invalid json"})
             return
-        _save_raw(raw)
         try:
             stored = ingest(payload)
         except Exception as e:  # noqa: BLE001 - never crash the receiver on one bad payload
-            self._json(500, {"error": str(e)})
+            print(f"ingest failed: {e}")
+            self._json(500, {"error": "internal error"})
             return
         self._json(200, {"status": "ok", "stored": stored})
 

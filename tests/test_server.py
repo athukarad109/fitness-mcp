@@ -57,3 +57,22 @@ def test_get_sleep(tmp_path, monkeypatch):
 
     all_sessions = server.get_sleep("2024-07-03", "2024-07-31")
     assert len(all_sessions) == 2
+
+
+def test_get_body_metrics(tmp_path, monkeypatch):
+    monkeypatch.setenv("FITNESS_MCP_DATA_DIR", str(tmp_path))
+    store.upsert("body_metrics", [
+        {"date": "2024-07-01", "weight_kg": 70.5},
+        {"date": "2024-07-05", "weight_kg": 70.1},
+    ], "date")
+    got = server.get_body_metrics("2024-07-01", "2024-07-03")
+    assert [r["weight_kg"] for r in got] == [70.5]
+    assert len(server.get_body_metrics("2024-07-01", "2024-07-31")) == 2
+
+
+def test_coverage_reports_distance_only(tmp_path, monkeypatch):
+    monkeypatch.setenv("FITNESS_MCP_DATA_DIR", str(tmp_path))
+    store.upsert("distance", [{"id": "d1", "start": "2024-07-01T09:00:00+05:30", "value": 2500}], "id")
+    out = server.list_data_coverage()
+    assert "coverage" in out and "message" not in out
+    assert out["coverage"]["distance"] == {"count": 1, "start": "2024-07-01", "end": "2024-07-01"}
