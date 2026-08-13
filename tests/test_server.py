@@ -42,3 +42,18 @@ def test_metric_stats_no_data(tmp_path, monkeypatch):
     _seed(tmp_path, monkeypatch)
     stats = server.get_metric_stats("calories", "2024-07-01", "2024-07-31")
     assert stats["count"] == 0 and "no data" in stats["message"]
+
+
+def test_get_sleep(tmp_path, monkeypatch):
+    monkeypatch.setenv("FITNESS_MCP_DATA_DIR", str(tmp_path))
+    store.upsert("sleep", [
+        {"start": "2024-07-03T23:00:00+05:30", "end": "2024-07-04T07:00:00+05:30", "duration_min": 480.0},
+        {"start": "2024-07-04T23:00:00+05:30", "end": "2024-07-05T07:00:00+05:30", "duration_min": 480.0},
+    ], "start")
+
+    sessions = server.get_sleep("2024-07-03", "2024-07-03")
+    assert len(sessions) == 1
+    assert sessions[0]["start"] == "2024-07-03T23:00:00+05:30"
+
+    all_sessions = server.get_sleep("2024-07-03", "2024-07-31")
+    assert len(all_sessions) == 2
