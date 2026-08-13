@@ -1,0 +1,25 @@
+{
+  "timestamp": "2024-07-02T00:00:00+05:30",
+  "app_version": "1.0.0",
+  "steps": [
+    {"id": "s1", "start_time": "2024-07-01T09:00:00+05:30", "end_time": "2024-07-01T10:00:00+05:30", "count": 3000},
+    {"id": "s2", "start_time": "2024-07-01T18:00:00+05:30", "end_time": "2024-07-01T19:00:00+05:30", "count": 5000}
+  ],
+  "distance": [
+    {"id": "d1", "start_time": "2024-07-01T09:00:00+05:30", "end_time": "2024-07-01T10:00:00+05:30", "distance": 2500.5}
+  ],
+  "heart_rate": [
+    {"time": "2024-07-01T09:00:00+05:30", "bpm": 60},
+    {"time": "2024-07-01T09:05:00+05:30", "bpm": 80}
+  ],
+  "sleep_sessions": [
+    {"start_time": "2024-07-01T23:00:00+05:30", "end_time": "2024-07-02T07:00:00+05:30"}
+  ],
+  "exercise_sessions": [
+    {"start_time": "2024-07-01T06:00:00+05:30", "end_time": "2024-07-01T06:30:00+05:30", "exercise_type": "Running", "distance": 5000, "energy": 320}
+  ],
+  "weight": [
+    {"time": "2024-07-01T07:00:00+05:30", "weight_kg": 70.5}
+  ],
+  "unknown_future_section": [{"foo": "bar"}]
+}
