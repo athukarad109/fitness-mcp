@@ -25,3 +25,11 @@ def receiver_host() -> str:
 
 def receiver_port() -> int:
     return int(os.environ.get("FITNESS_MCP_PORT", "8765"))
+
+
+def mcp_host() -> str:
+    return os.environ.get("FITNESS_MCP_MCP_HOST", "127.0.0.1")
+
+
+def mcp_port() -> int:
+    return int(os.environ.get("FITNESS_MCP_MCP_PORT", "8000"))

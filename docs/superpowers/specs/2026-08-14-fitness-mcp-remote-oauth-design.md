@@ -40,6 +40,22 @@ spare Android phone and want a properly secured (OAuth) system.
 - The `health-connect-webhook` app can set **only the destination URL** — no custom headers, no
   token. So its POST **cannot** be OAuth'd or even API-key'd. Solution: point it at **`localhost`**
   on the same phone, so write traffic never leaves the device (no internet write exposure at all).
+- The app is **paid on the Play Store**, but it is open-source (AGPLv3) and ships a **free prebuilt
+  APK on its GitHub releases** (latest v1.9.14) — sideload that instead of paying, or build from
+  source. Any reader that can POST to localhost works; this app is just the proven default.
+- **Ways to fetch Google Fit data (checked 2026-08-14):** the Fit **REST API is closed** to new
+  access and dies end of 2026 → the **web** path and **Google Apps Script** path (Apps Script just
+  calls that same REST API; all tutorials are pre-2024 and won't work for a new project) are both
+  **dead**. **Google Takeout** is manual, not live. A **native Android app using Health Connect** is
+  the **only** live programmatic way to read the data. **Decision:** use the free
+  `health-connect-webhook` APK **for now**; building our own reader is deferred (see B-Reader).
+- **B-Reader (deferred, optional future sub-project):** a minimal Kotlin app that reads Health
+  Connect and POSTs **our** JSON contract to `localhost`, replacing the third-party app. Upsides:
+  no third-party dependency, and we define the payload (making `webhook_mapper` an exact contract
+  instead of defensive guessing). A personal sideloaded app skips Google's Health Connect Play-Store
+  permissions review. Cost: real Android/Kotlin work (Health Connect client, WorkManager background
+  sync, foreground service + battery exemption, boot start), built/tested on-device. Revisit after
+  B1/B2 prove the rest of the system.
 - Offloading auth to **Cloudflare Access "managed OAuth"** is **flaky with claude.ai web+mobile**
   (open bug reports; connects from Claude Code but fails from the app). So we **self-host OAuth 2.1**
   (DCR + PKCE) in the MCP server; Cloudflare Tunnel only provides the stable HTTPS URL. Reference
